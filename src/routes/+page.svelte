@@ -11,5 +11,11 @@
 </svelte:head>
 
 <Container>
-	<h1 class="text-3xl font-bold mb-4">Hello {data.name}!</h1>
+	{#if data.user}
+		<h1 class="text-3xl font-bold py-12">Hello {data.user.name}!</h1>
+	{/if}
+	{#if !data.user}
+		<h1 class="text-3xl font-bold py-12">Hello visitor</h1>
+		<p>Feel free to login</p>
+	{/if}
 </Container>

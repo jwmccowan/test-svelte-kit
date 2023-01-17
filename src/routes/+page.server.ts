@@ -1,7 +1,7 @@
 import type { PageServerLoad } from "./$types";
 
-export const load = (async () => {
+export const load = (async (event) => {
 	return {
-		name: "John",
+		user: event.locals.user ?? null,
 	};
 }) satisfies PageServerLoad;

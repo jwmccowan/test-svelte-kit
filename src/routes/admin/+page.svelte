@@ -11,5 +11,5 @@
 </svelte:head>
 
 <Container>
-	<h1 class="text-2xl font-bold py-12">Welcome to the app, {data.name}</h1>
+	<h1 class="text-2xl font-bold py-12">Welcome to the admin page, {data.name}</h1>
 </Container>
