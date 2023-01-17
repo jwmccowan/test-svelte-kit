@@ -5,6 +5,11 @@
 	export let data: PageData;
 </script>
 
+<svelte:head>
+	<title>Admin - Home</title>
+	<meta name="A page with sensitive information, only visible to ADMINs" />
+</svelte:head>
+
 <Container>
 	<h1 class="text-2xl font-bold py-12">Welcome to the app, {data.name}</h1>
 </Container>
