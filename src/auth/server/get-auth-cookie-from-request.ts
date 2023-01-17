@@ -9,7 +9,7 @@ export default function getAuthCookieFromRequest(event: RequestEvent): AuthCooki
 		return null;
 	}
 	try {
-		return AuthCookieSchema.parse(JSON.stringify(cookie));
+		return AuthCookieSchema.parse(JSON.parse(cookie));
 	} catch {
 		return null;
 	}

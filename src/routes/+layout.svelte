@@ -16,6 +16,12 @@
 				type="submit">Log out</button
 			>
 		</form>
+		<a
+			class="px-4 py-2 text-sm text-white font-medium cursor-default bg-purple-500 rounded hover:bg-purple-600"
+			href="/admin"
+		>
+			Admin page
+		</a>
 	</nav>
 </div>
 
