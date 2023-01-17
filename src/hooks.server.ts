@@ -6,8 +6,8 @@ export const handle = (async ({ event, resolve }) => {
 	event.locals.user = getAuthenticatedUser(event);
 
 	/* Do request */
-	const request = resolve(event);
+	const response = await resolve(event);
 
 	/* After request */
-	return request;
+	return response;
 }) satisfies Handle;
