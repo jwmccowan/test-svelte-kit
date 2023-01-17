@@ -1,12 +1,12 @@
 import type { RequestEvent } from "@sveltejs/kit";
-import { findUser } from "./find-user";
 import getAuthCookieFromRequest from "./get-auth-cookie-from-request";
+import type { User } from "@prisma/client";
 
-export default function getAuthenticatedUser(event: RequestEvent): User | null {
+export default async function getAuthenticatedUser(event: RequestEvent): Promise<User | null> {
 	const userCookie = getAuthCookieFromRequest(event);
 	if (!userCookie) {
 		return null;
 	}
 
-	return findUser(userCookie.id);
+	return event.locals.prismaClient.user.findFirst();
 }
