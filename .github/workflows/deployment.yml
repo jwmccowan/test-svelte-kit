@@ -43,7 +43,7 @@ jobs:
         run: pnpm build
       
       - name: Run local tests
-        run: pnpm test
+        run: pnpm test:e2e
       
       - name: Deploy to staging 
         id: deploy-vercel-staging
@@ -57,7 +57,7 @@ jobs:
       - name: Test against staging
         env: 
           VERCEL_URL: ${{ steps.deploy-vercel-staging.outputs.preview-url }}
-        run: pnpx playwright test
+        run: pnpm playwright test:e2e
 
       - name: Deploy to Production 
         uses: amondnet/vercel-action@v20
