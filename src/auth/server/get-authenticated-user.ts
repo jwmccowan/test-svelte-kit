@@ -8,5 +8,5 @@ export default async function getAuthenticatedUser(event: RequestEvent): Promise
 		return null;
 	}
 
-	return event.locals.prismaClient.user.findFirst();
+	return event.locals.prismaClient.user.findFirst({ where: { id: userCookie.id } });
 }
