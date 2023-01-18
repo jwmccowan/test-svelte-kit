@@ -36,6 +36,9 @@ jobs:
       - name: Generate prisma
         run: pnpx prisma generate
       
+      - name: Install playwright utils
+        run: pnpx playwright install
+      
       - name: Build app
         run: pnpm build
       
@@ -49,12 +52,13 @@ jobs:
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
           vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
-          scope: ${{ secrets.VERCEL_ORG_ID }} 
+          scope: ${{ secrets.VERCEL_ORG_ID }}
       
       - name: Test against staging
         env: 
           VERCEL_URL: ${{ steps.deploy-vercel-staging.outputs.preview-url }}
-        run: pnpm test
+        run: pnpx playwright test
+
       - name: Deploy to Production 
         uses: amondnet/vercel-action@v20
         id: deploy-vercel-production
