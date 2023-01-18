@@ -68,19 +68,4 @@ jobs:
           vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
           vercel-args: '--prod' 
-          scope: ${{ secrets.VERCEL_ORG_ID }} 
-
-  test:
-    needs: install-and-build
-    runs-on: ubuntu-latest
-    permissions:
-      deployments: write
-    steps:
-      - uses: amondnet/vercel-action@v20 #deploy
-        with:
-          vercel-token: ${{ secrets.VERCEL_TOKEN }} # Required
-          github-token: ${{ secrets.GITHUB_TOKEN }} #Optional 
-          vercel-args: '--prod' #Optional
-          vercel-org-id: ${{ secrets.ORG_ID}}  #Required
-          vercel-project-id: ${{ secrets.PROJECT_ID}} #Required 
-          working-directory: ./sub-directory
+          scope: ${{ secrets.VERCEL_ORG_ID }}
