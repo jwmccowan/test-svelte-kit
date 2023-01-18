@@ -7,7 +7,7 @@
 
 <svelte:head>
 	<title>Admin - Home</title>
-	<meta name="A page with sensitive information, only visible to ADMINs" />
+	<meta name="description" content="A page with sensitive information" />
 </svelte:head>
 
 <Container>

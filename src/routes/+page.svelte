@@ -7,7 +7,7 @@
 
 <svelte:head>
 	<title>Testing svelte kit</title>
-	<meta name="A minimum setup for all things sveltey" />
+	<meta name="description" content="A minimum setup for all things sveltey" />
 </svelte:head>
 
 <Container>
@@ -32,7 +32,7 @@
 					<input class="px-4 py-2 text-sm border rounded" name="email" type="email" />
 				</label>
 				<button
-					class="px-4 py-2 text-sm text-white font-medium cursor-default bg-purple-500 rounded hover:bg-purple-600"
+					class="px-4 py-2 text-sm text-white font-medium cursor-default bg-purple-600 rounded hover:bg-purple-700"
 					type="submit"
 				>
 					Register
@@ -47,7 +47,7 @@
 						<form method="post" action="/login">
 							<input name="email" value={user.email} hidden />
 							<button
-								class="px-4 py-2 text-sm text-white font-medium cursor-default bg-purple-500 rounded hover:bg-purple-600"
+								class="px-4 py-2 text-sm text-white font-medium cursor-default bg-purple-600 rounded hover:bg-purple-700"
 								type="submit">Login as {user.email}</button
 							>
 						</form>

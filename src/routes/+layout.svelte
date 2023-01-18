@@ -7,18 +7,18 @@
 	<Container>
 		<nav class="flex flex-row gap-6 py-4 justify-end">
 			<a
-				class="px-4 py-2 text-sm text-white font-medium bg-purple-500 rounded hover:bg-purple-600 mr-auto"
+				class="px-4 py-2 text-sm text-white font-medium bg-purple-600 rounded hover:bg-purple-700 mr-auto"
 				href="/">Home</a
 			>
 			<a
-				class="px-4 py-2 text-sm text-white font-medium bg-purple-500 rounded hover:bg-purple-600"
+				class="px-4 py-2 text-sm text-white font-medium bg-purple-600 rounded hover:bg-purple-700"
 				href="/admin"
 			>
 				Admin page
 			</a>
 			<form method="post" action="/logout">
 				<button
-					class="px-4 py-2 text-sm text-white font-medium cursor-default bg-purple-500 rounded hover:bg-purple-600"
+					class="px-4 py-2 text-sm text-white font-medium cursor-default bg-purple-600 rounded hover:bg-purple-700"
 					type="submit"
 				>
 					Log out
