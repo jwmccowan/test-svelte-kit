@@ -61,7 +61,7 @@ jobs:
 
       - name: Run local tests
         env:
-          DATABASE_URL: postgres://postgres:postgres@localhost:5432/test_svelte_kit
+          DATABASE_URL: postgres://postgres:postgres@localhost:5432
         run: pnpm test:e2e
       
       - name: Deploy to staging 
