@@ -87,6 +87,12 @@ jobs:
         # TODO: until we can get a special staging db, this will fail for any schema changes
         run: echo "Test against staging"
         # run: pnpm playwright test:e2e
+      
+      - name: Migrate prod db
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main' 
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: pnpx prisma migrate deploy
 
       - name: Deploy to Production 
         uses: amondnet/vercel-action@v20

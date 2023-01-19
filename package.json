@@ -12,7 +12,7 @@
 		"test:unit": "vitest",
 		"lint": "prettier --plugin-search-dir . --check . && eslint .",
 		"format": "prettier --plugin-search-dir . --write .",
-		"vercel-build": "prisma generate && prisma migrate deploy && vite build"
+		"vercel-build": "vite build"
 	},
 	"devDependencies": {
 		"@playwright/test": "^1.28.1",
