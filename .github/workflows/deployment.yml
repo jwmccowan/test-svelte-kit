@@ -50,6 +50,9 @@ jobs:
       - name: Generate prisma
         run: pnpx prisma generate
       
+      - name: Migrate prisma
+        run: pnpx prisma
+      
       - name: Install playwright utils
         run: pnpx playwright install
 
@@ -58,7 +61,7 @@ jobs:
 
       - name: Run local tests
         env:
-          DATABASE_URL: "postgres://postgres:postgres@localhost:5432/test_svelte_kit"
+          DATABASE_URL: postgres://postgres:postgres@localhost:5432/test_svelte_kit
         run: pnpm test:e2e
       
       - name: Deploy to staging 
