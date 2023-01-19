@@ -1,0 +1,106 @@
+name: Deploy
+on:
+  - push
+  - pull_request
+
+jobs:
+  install-dependencies:
+    runs-on: ubuntu-latest
+      
+    services:
+      postgres:
+        image: postgres
+        env: 
+          POSTGRES_PASSWORD: postgres
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 7
+          run_install: false
+
+      - name: Get pnpm store directory
+        id: pnpm-cache
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
+
+      - name: Setup pnpm cache
+        uses: actions/cache@v3
+        with:
+          path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+
+      - name: Install dependencies
+        run: pnpm install
+      
+      - name: Generate prisma
+        run: pnpx prisma generate
+      
+      - name: Migrate local db
+        env:
+          DATABASE_URL: ${{ secrets.LOCAL_DATABASE_URL }}
+        run: pnpx prisma migrate deploy
+      
+      - name: Install playwright utils
+        run: pnpx playwright install
+
+      - name: Build app
+        run: pnpm build
+
+      - name: Run local tests
+        env:
+          DATABASE_URL: ${{ secrets.LOCAL_DATABASE_URL }}
+        run: pnpm test:e2e
+
+      - name: Migrate staging db
+        run: echo "Migrate schema changes to staging db..."
+
+      - name: Deploy to staging 
+        id: deploy-vercel-staging
+        uses: amondnet/vercel-action@v20
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+          scope: ${{ secrets.VERCEL_ORG_ID }}
+      
+      - name: Test against staging
+        env:
+          # TODO: This should point to staging url
+          DATABASE_URL: github.DATABASE_URL
+          # TODO: We need to add this env variable into our e2e tests
+          # VERCEL_URL: ${{ steps.deploy-vercel-staging.outputs.preview-url }}
+        # TODO: until we can get a special staging db, this will fail for any schema changes
+        run: echo "Test against staging"
+        # run: pnpm playwright test:e2e
+      
+      - name: Migrate prod db
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main' 
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: pnpx prisma migrate deploy
+
+      - name: Deploy to Production 
+        uses: amondnet/vercel-action@v20
+        id: deploy-vercel-production
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main' 
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+          vercel-args: '--prod' 
+          scope: ${{ secrets.VERCEL_ORG_ID }}
