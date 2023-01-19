@@ -4,8 +4,22 @@ on:
   - pull_request
 
 jobs:
-  install-and-build:
+  install-dependencies:
     runs-on: ubuntu-latest
+      
+    services:
+      postgres:
+        image: postgres
+        env: 
+          POSTGRES_PASSWORD: password
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -38,11 +52,13 @@ jobs:
       
       - name: Install playwright utils
         run: pnpx playwright install
-      
+
       - name: Build app
         run: pnpm build
-      
+
       - name: Run local tests
+        env:
+          DATABASE_URL: "postgres://postgres:postgres@localhost:5432/test_svelte_kit"
         run: pnpm test:e2e
       
       - name: Deploy to staging 
@@ -55,8 +71,9 @@ jobs:
           scope: ${{ secrets.VERCEL_ORG_ID }}
       
       - name: Test against staging
-        env: 
-          VERCEL_URL: ${{ steps.deploy-vercel-staging.outputs.preview-url }}
+        env:
+          DATABASE_URL: github.DATABASE_URL
+          # VERCEL_URL: ${{ steps.deploy-vercel-staging.outputs.preview-url }}
         run: pnpm playwright test:e2e
 
       - name: Deploy to Production 
