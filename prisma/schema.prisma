@@ -15,8 +15,17 @@ model User {
   id            String             @id @default(uuid())
   email         String             @unique @db.VarChar(255)
   organizations OrganizationUser[]
+  profile       Profile?
 
+  @@index([email])
   @@map("user")
+}
+
+model Profile {
+  userId String @id @map("user_id")
+  user   User   @relation(fields: [userId], references: [id])
+
+  @@map("profile")
 }
 
 model Organization {
@@ -28,11 +37,19 @@ model Organization {
 }
 
 model OrganizationUser {
-  user           User         @relation(fields: [userId], references: [id])
-  userId         String
-  Organization   Organization @relation(fields: [organizationId], references: [id])
-  organizationId String
+  user           User                 @relation(fields: [userId], references: [id])
+  userId         String               @map("user_id")
+  Organization   Organization         @relation(fields: [organizationId], references: [id])
+  organizationId String               @map("organization_id")
+  role           OrganizationUserRole
 
   @@id([organizationId, userId])
   @@map("organization_user")
+}
+
+enum OrganizationUserRole {
+  ADMIN
+  RECRUITER
+
+  @@map("organization_user_role")
 }
